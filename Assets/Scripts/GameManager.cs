@@ -6,31 +6,52 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI gameOverText;
+    public TextMeshProUGUI GameRestartText;
+    public TextMeshProUGUI YouWinText; // Reference to "You Win" text UI
     private int score;
+
     // Start is called before the first frame update
     void Start()
     {
         score = 0;
         scoreText.text = "Score: " + score;
+        GameRestartText.gameObject.SetActive(false); // Ensure Game Restart text is hidden initially
+        YouWinText.gameObject.SetActive(false); // Ensure "You Win!" text is hidden initially
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateScore(int scoreToAdd)
     {
-        //Update score by 5 every time 
-    }
-
-    public void UpdateScore(int scoreToAdd){
-        //increase the score
+        // Increase the score
         score += scoreToAdd;
-        //print it as score increases
         scoreText.text = "Score = " + score;
-    }
-    
-    public void GameOver(){
-             //Game over text appear
-        gameOverText.gameObject.SetActive(true);
+
+        // Cthe score is greater than or equal to 100
+        if (score >= 100) 
+        {
+            DisplayWinText(); //display "You Win!" text
+        }
     }
 
+    public void GameOver()
+    {
+        // Show the Game Over text
+        GameRestartText.gameObject.SetActive(true);
+
+        // Hide the "Game Restart" text after a short delay
+        StartCoroutine(HideGameRestartText());
+    }
+
+    private IEnumerator HideGameRestartText()
+    {
+        // Wait for 2 seconds and then hide the "Game Restart" text
+        yield return new WaitForSeconds(2f);
+        GameRestartText.gameObject.SetActive(false);
+    }
+
+    public void DisplayWinText()
+    {
+        // Show the "You Win!" text
+        YouWinText.gameObject.SetActive(true);
+    }
 }
+
